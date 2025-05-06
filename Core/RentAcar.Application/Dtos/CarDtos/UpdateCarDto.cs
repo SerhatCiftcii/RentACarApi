@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentACar.Domain.Entites
+namespace RentAcar.Application.Dtos.CarDtos
 {
-    public class Car
+    public class UpdateCarDto
     {
         public int Id { get; set; }
         public string ImageUrl { get; set; }
@@ -20,7 +20,5 @@ namespace RentACar.Domain.Entites
         public string Fuel { get; set; }
         public decimal DailyPrice { get; set; }
         public bool IsAvailable { get; set; }
-
-
     }
 }
