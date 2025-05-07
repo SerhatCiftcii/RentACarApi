@@ -94,9 +94,6 @@ namespace RentAcar.Application.Services.CarServices
             value.IsAvailable = car.IsAvailable;
             value.Year = car.Year;
             await _repository.UpdateCarAsync(value);
-
-
-
         }
     }
 }
