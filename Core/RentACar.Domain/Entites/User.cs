@@ -17,7 +17,7 @@ namespace RentACar.Domain.Entites
         public string Password { get; set; }
         public string Role { get; set; }
 
-        //rentedcarsmodelinden sonra object kısmı değişicek
+  
         public List<RentedCar> RentedCars  { get; set; }
 
 

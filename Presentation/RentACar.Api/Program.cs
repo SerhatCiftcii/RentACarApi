@@ -1,6 +1,8 @@
 using RentAcar.Application.Services.CarServices;
+using RentAcar.Application.Services.UserServices;
 using RentAcar.Persistence.Context;
 using RentAcar.Persistence.Repositories.CarRepositories;
+using RentAcar.Persistence.Repositories.UserRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,11 @@ builder.Services.AddDbContext<RentCarDbContext>();
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICarServices, CarServices>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserServices, UserServices>();
+
+
 
 
 builder.Services.AddControllers();
