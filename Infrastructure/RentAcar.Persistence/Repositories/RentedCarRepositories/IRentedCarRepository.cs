@@ -12,8 +12,9 @@ namespace RentAcar.Persistence.Repositories.RentedCarRepositories
         Task<List<RentedCar>> GetAllRentedCarAsync();
         Task<RentedCar> GetByIdRentedCarAsync(int id); //
         Task CreateRentedCarAsync(RentedCar model);
-        Task UpdateRentedCarsync(RentedCar model);
+        Task UpdateRentedCarAsync(RentedCar model);
         Task DeleteRentedCarAsync(RentedCar model); //service tarafında id ile yaptım.
+        
     }
 }
 

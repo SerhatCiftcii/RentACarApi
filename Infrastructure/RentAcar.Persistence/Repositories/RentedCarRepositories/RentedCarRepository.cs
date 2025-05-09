@@ -33,6 +33,7 @@ namespace RentAcar.Persistence.Repositories.RentedCarRepositories
         public async Task<List<RentedCar>> GetAllRentedCarAsync()
         {
             var value = await _context.RentedCars.ToListAsync();
+            
             return value;
         }
 
@@ -42,7 +43,7 @@ namespace RentAcar.Persistence.Repositories.RentedCarRepositories
             return value;
         }
 
-        public async Task UpdateRentedCarsync(RentedCar model)
+        public async Task UpdateRentedCarAsync(RentedCar model)
         {
             _context.RentedCars.Update(model);
            await _context.SaveChangesAsync();

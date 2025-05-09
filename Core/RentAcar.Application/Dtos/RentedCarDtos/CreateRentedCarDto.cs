@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RentAcar.Application.RentedCarDtos
 {
-    internal class CreateRentedCarDto
+    public class CreateRentedCarDto
     {
       //  public int Id { get; set; }
         public int UserId { get; set; }
