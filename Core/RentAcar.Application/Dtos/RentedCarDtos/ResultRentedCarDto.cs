@@ -1,4 +1,5 @@
-﻿using RentACar.Domain.Entites;
+﻿using RentAcar.Application.Dtos.UserDtos;
+using RentACar.Domain.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace RentAcar.Application.RentedCarDtos
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        // public User User { get; set; } // buraya farklı türde user ekle çünkü döngüye girip hata alıyorum. yeni, bir dto oluştur user dtonun içne onlyInfoUser ekledim.içinde listrented car olmucak yani.Sadece kullanıcı bilgisi
+        public OnlyInfoUserDto User { get; set; } // sadece kullanıcı bilgisi yeterli
         public int CarId { get; set; }
         public Car Car { get; set; }
         public DateTime StartDate { get; set; }

@@ -1,4 +1,5 @@
-﻿using RentAcar.Application.RentedCarDtos;
+﻿using RentAcar.Application.Dtos.UserDtos;
+using RentAcar.Application.RentedCarDtos;
 using RentAcar.Persistence.Repositories.CarRepositories;
 using RentAcar.Persistence.Repositories.RentedCarRepositories;
 using RentAcar.Persistence.Repositories.UserRepositories;
@@ -51,18 +52,7 @@ namespace RentAcar.Application.Services.RentedCarServices
             var value = await _rentedCarRepository.GetAllRentedCarAsync();
             var users= await _userRepository.GetAllUsersAsync();
             var cars = await _carRepository.GetAllCarsAsync();
-            //var result = value.Select( x => new ResultRentedCarDto
-            //{
-            //    Id = x.Id,
-            //    UserId = x.UserId, 
-
-            //    CarId = x.CarId,
-            //    StartDate = x.StartDate,
-            //    EndDate = x.EndDate,
-            //    TotalPrice = x.TotalPrice,
-            //    DamagePrice = x.DamagePrice,
-            //    IsCompleted = x.IsCompleted
-            //}).ToList();
+           
             var result = new List<ResultRentedCarDto>();
             foreach (var rentedCar in value)
             {
@@ -80,7 +70,16 @@ namespace RentAcar.Application.Services.RentedCarServices
                     DamagePrice = rentedCar.DamagePrice,
                     IsCompleted = rentedCar.IsCompleted
                 };
-                //newRentedCar.User = user;
+                newRentedCar.User = new OnlyInfoUserDto
+                { 
+                    Id = user.Id,
+                    Surname = user.Surname,
+                    Role = user.Role,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    Password = user.Password
+                };
                 newRentedCar.Car = car;
                 result.Add(newRentedCar);
             }
