@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using RentAcar.Application.Services.CarServices;
 using RentAcar.Application.Services.RentedCarServices;
 using RentAcar.Application.Services.UserServices;
@@ -7,27 +8,34 @@ using RentAcar.Persistence.Context;
 using RentAcar.Persistence.Repositories.CarRepositories;
 using RentAcar.Persistence.Repositories.RentedCarRepositories;
 using RentAcar.Persistence.Repositories.UserRepositories;
+using RentAcar.Persistence.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region JWT Ayarlarý
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
     options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true, // Token’ý kim verdi? (Senin API)
-            ValidateAudience = true, //Token’ý kim kullanacak ?
-            ValidateLifetime = true, // Token süresinin geçerliliðini kontrol et
-            ValidateIssuerSigningKey = true, // Token’ýn imzasýný kontrol et
-            ValidIssuer = builder.Configuration["Jwt:Issuer"], //
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 builder.Services.AddAuthorization();
+#endregion
 
-// Add services to the container.
+#region Controller Servisleri
+builder.Services.AddControllers(); // <-- Burasý eksikti!
+#endregion
+
+#region Veritabaný ve Uygulama Servisleri
 builder.Services.AddDbContext<RentCarDbContext>();
 
 builder.Services.AddScoped<ICarRepository, CarRepository>();
@@ -39,29 +47,62 @@ builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IRentedCarRepository, RentedCarRepository>();
 builder.Services.AddScoped<IRentedCarServices, RentedCarServices>();
 
+builder.Services.AddScoped<IAuthServices, AuthServices>();
+#endregion
 
-
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+#region Swagger Ayarlarý
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rent Car Api", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Örnek: 'Bearer {token}'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
+});
+#endregion
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+#region HTTP Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rent Car Api v1");
+    });
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-// Authentication middleware must be placed before Authorization middleware
-app.UseAuthorization();
+app.UseAuthentication(); // JWT burada aktifleþir
+app.UseAuthorization();  // [Authorize] attribute buraya dayanýr
 
-app.MapControllers();
+app.MapControllers(); // Controller'lar route'lanýr
+#endregion
 
 app.Run();

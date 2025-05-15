@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RentAcar.Persistence.Services
 {
-    public class AuthServices //userid ve role göndereceğiz.
+    public class AuthServices :IAuthServices //userid ve role göndereceğiz.
     {
         private readonly IConfiguration _configuration;
 

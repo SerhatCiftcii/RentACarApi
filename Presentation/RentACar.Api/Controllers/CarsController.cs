@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RentAcar.Application.Dtos.CarDtos;
 using RentAcar.Application.Services.CarServices;
@@ -15,6 +16,7 @@ namespace RentACar.Api.Controllers
         {
             _carServices = carServices;
         }
+        [Authorize]
         [HttpGet("GetAllCars")]
         public async Task<IActionResult> GetAllCars()
         {
