@@ -80,6 +80,7 @@ namespace RentAcar.Application.Services.RentedCarServices
                     Phone = user.Phone,
                     Password = user.Password
                 };
+
                 newRentedCar.Car = car;
                 result.Add(newRentedCar);
             }
@@ -90,6 +91,8 @@ namespace RentAcar.Application.Services.RentedCarServices
         public async Task<GetByIdRentedCarDto> GetByIdRentedCar(int id)
         {
             var value = await _rentedCarRepository.GetByIdRentedCarAsync(id);
+            var user= await _userRepository.GetByIdUserAsync(value.UserId);
+            var car = await _carRepository.GetByIdCarAsync(value.CarId);
             var result = new GetByIdRentedCarDto
             {
                 Id = value.Id,
@@ -101,6 +104,17 @@ namespace RentAcar.Application.Services.RentedCarServices
                 DamagePrice = value.DamagePrice,
                 IsCompleted = value.IsCompleted
             };
+            result.User = new OnlyInfoUserDto
+            {
+                Id = user.Id,
+                Surname = user.Surname,
+                Role = user.Role,
+                Name = user.Name,
+                Email = user.Email,
+                Phone = user.Phone,
+                Password = user.Password
+            };
+            result.Car = car;
             return result;
         }
 

@@ -10,6 +10,7 @@ namespace RentAcar.Application.Services.UserServices
     public interface IUserServices
     {
         Task<List<ResultUserDto>> GetAllUsers();
+        Task<List<ResultUserDto>> GetAllUsersCreateByChatGpt();
         Task<GetByIdUserDto> GetByIdUser(int id);
         Task CreateUser(CreateUserDto dto);
         Task UpdateUser(UpdateUserDto dto);

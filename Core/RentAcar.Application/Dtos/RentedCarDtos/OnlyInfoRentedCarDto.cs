@@ -6,13 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentAcar.Application.RentedCarDtos
+namespace RentAcar.Application.Dtos.RentedCarDtos
 {
-    public class GetByIdRentedCarDto
-    {
+    public class OnlyInfoRentedCarDto
+    { //user bilgielrini almaya gerek yok
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public OnlyInfoUserDto User { get; set; }
+      
         public int CarId { get; set; }
         public Car Car { get; set; }
         public DateTime StartDate { get; set; }

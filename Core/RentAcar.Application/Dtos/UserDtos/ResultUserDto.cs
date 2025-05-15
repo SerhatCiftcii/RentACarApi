@@ -1,4 +1,5 @@
-﻿using RentACar.Domain.Entites;
+﻿using RentAcar.Application.Dtos.RentedCarDtos;
+using RentACar.Domain.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,6 @@ namespace RentAcar.Application.Dtos.UserDtos
         public string Role { get; set; }
 
         //rentedcarsmodelinden sonra object kısmı değişicek
-        public List<RentedCar> RentedCars { get; set; }
+        public List<OnlyInfoRentedCarDto> RentedCars { get; set; }
     }
 }

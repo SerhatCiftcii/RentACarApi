@@ -21,6 +21,12 @@ namespace RentACar.Api.Controllers
             var result = await _userServices.GetAllUsers();
             return Ok(result);
         }
+        [HttpGet("getAllUsersCreateByChatGpt")]
+        public async Task<IActionResult> GetAllUsersChatGpt()
+        {
+            var result = await _userServices.GetAllUsersCreateByChatGpt();
+            return Ok(result);
+        }
         [HttpGet("getByIdUser/{id}")]
         public async Task<IActionResult> GetByIdUser(int id)
         {
