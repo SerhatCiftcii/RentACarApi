@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using RentAcar.Application.Services.CarServices;
 using RentAcar.Application.Services.RentedCarServices;
 using RentAcar.Application.Services.UserServices;
@@ -5,8 +7,25 @@ using RentAcar.Persistence.Context;
 using RentAcar.Persistence.Repositories.CarRepositories;
 using RentAcar.Persistence.Repositories.RentedCarRepositories;
 using RentAcar.Persistence.Repositories.UserRepositories;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true, // Token’ý kim verdi? (Senin API)
+            ValidateAudience = true, //Token’ý kim kullanacak ?
+            ValidateLifetime = true, // Token süresinin geçerliliðini kontrol et
+            ValidateIssuerSigningKey = true, // Token’ýn imzasýný kontrol et
+            ValidIssuer = builder.Configuration["Jwt:Issuer"], //
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+builder.Services.AddAuthorization();
 
 // Add services to the container.
 builder.Services.AddDbContext<RentCarDbContext>();
@@ -39,6 +58,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+// Authentication middleware must be placed before Authorization middleware
 app.UseAuthorization();
 
 app.MapControllers();
