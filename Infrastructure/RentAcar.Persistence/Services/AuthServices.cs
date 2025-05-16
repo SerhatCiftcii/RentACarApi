@@ -10,15 +10,16 @@ using System.Threading.Tasks;
 
 namespace RentAcar.Persistence.Services
 {
-    public class AuthServices :IAuthServices //userid ve role göndereceğiz.
+    public class AuthServices : IAuthServices //userid ve role göndereceğiz.
     {
         private readonly IConfiguration _configuration;
+
 
         public AuthServices(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-        public string GenerateToken()
+        public string GenerateToken(string id, string role)
         {
             // Token generation logic here
             // This is a placeholder implementation
@@ -28,14 +29,15 @@ namespace RentAcar.Persistence.Services
 
             var calims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, "subname"),//buraya "userId ataaması yapılıcak" kullanıcı adı şifre dopruysa ıd yi göndercez 
-                new Claim(ClaimTypes.Role,"admin"),
+                new Claim(JwtRegisteredClaimNames.Sub, id),//buraya "userId ataaması yapılıcak" kullanıcı adı şifre dopruysa ıd yi göndercez 
+                //new Claim(ClaimTypes.Role,role),
+                new Claim("role", role), 
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // benzersizguid oluşturma  //jti benzsersiz idden ne kadar oldunu kontrolü 
             };
-            var token= new JwtSecurityToken(
+            var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],// Token’ı kim verdi? (Senin API)
                 audience: _configuration["Jwt:Audience"], //Token’ı kim kullanacak ?
-                claims : calims, // Kullanıcıya dair bilgiler
+                claims: calims, // Kullanıcıya dair bilgiler
                 expires: DateTime.UtcNow.AddHours(1), // Token expiration time
                 signingCredentials: credentials //İmzalama bilgisi
             );

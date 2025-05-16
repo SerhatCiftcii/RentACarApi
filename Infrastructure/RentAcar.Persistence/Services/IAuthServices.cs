@@ -8,6 +8,6 @@ namespace RentAcar.Persistence.Services
 {
     public interface IAuthServices
     {
-        string GenerateToken();
+        string GenerateToken(string id ,string role); //ayrı ayrı dto olabilir.
     }
 }

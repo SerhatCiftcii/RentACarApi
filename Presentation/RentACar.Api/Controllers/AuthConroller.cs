@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RentAcar.Application.Dtos.AuthDtos;
+using RentAcar.Application.Services.UserServices;
 using RentAcar.Persistence.Services;
+using System.Threading.Tasks;
 
 namespace RentACar.Api.Controllers
 {
@@ -10,18 +12,21 @@ namespace RentACar.Api.Controllers
     public class AuthConroller : ControllerBase
     {
         private readonly IAuthServices _authServices;
+        private readonly IUserServices _userServices;
 
-        public AuthConroller(IAuthServices authServices)
+        public AuthConroller(IAuthServices authServices, IUserServices userServices)
         {
             _authServices = authServices;
+            _userServices = userServices;
         }
         [HttpPost("Login")]
-        public IActionResult Login(LoginDto model)
+        public async Task<IActionResult> Login(LoginDto model)
         {
-            if(model.Email== "admin@gmail.com" && model.Password == "123")
+            var user = await _userServices.CheckUser(model);
+            if (user != null)
             {
-                var token= _authServices.GenerateToken();
-                return Ok(token);
+                var token= _authServices.GenerateToken(user.Id.ToString(),user.Role);
+                return Ok(new {jwtToken=token});
             }
             return Unauthorized();
         }

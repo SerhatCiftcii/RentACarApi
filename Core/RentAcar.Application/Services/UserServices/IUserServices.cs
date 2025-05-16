@@ -1,4 +1,5 @@
-﻿using RentAcar.Application.Dtos.UserDtos;
+﻿using RentAcar.Application.Dtos.AuthDtos;
+using RentAcar.Application.Dtos.UserDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace RentAcar.Application.Services.UserServices
         Task CreateUser(CreateUserDto dto);
         Task UpdateUser(UpdateUserDto dto);
         Task DeleteUser(int id);
+        Task<OnlyInfoUserDto> CheckUser(LoginDto dto);
     }
 }

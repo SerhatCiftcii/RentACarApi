@@ -1,4 +1,5 @@
-﻿using RentAcar.Application.Dtos.RentedCarDtos;
+﻿using RentAcar.Application.Dtos.AuthDtos;
+using RentAcar.Application.Dtos.RentedCarDtos;
 using RentAcar.Application.Dtos.UserDtos;
 using RentAcar.Persistence.Repositories.CarRepositories;
 using RentAcar.Persistence.Repositories.RentedCarRepositories;
@@ -23,6 +24,27 @@ namespace RentAcar.Application.Services.UserServices
             _rentedCarRepository = rentedCarRepository;
             _carRepository = carRepository;
         }
+
+        public async Task<OnlyInfoUserDto> CheckUser(LoginDto dto)
+        {
+           var user = await _userRepository.CheckUser(dto.Email, dto.Password);
+            if (user != null)
+            {
+                var result = new OnlyInfoUserDto
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    Password = user.Password,
+                    Role = user.Role,
+                };
+                return result;
+            }
+            return null;
+        }
+
         public async Task CreateUser(CreateUserDto dto)
         {
             var value = new User
