@@ -53,7 +53,7 @@ RentACar
 
 ---
 
-## 💾 Veritabanı Ayarı
+### 💾 Veritabanı Ayarı
 
 Veritabanı bağlantısı `RentCarDbContext` içerisinde tanımlanmıştır:
 Server=SERHAT\\SQLEXPRESS bu ismi kendi sql server isminize göre ayarlayabilirsiniz.
